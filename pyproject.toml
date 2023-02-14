@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "d-bot"
+version = "0.1.0"
+description = "A bot for Discord"
+authors = ["Enrico <enrico.francesco.damiani@gmail.com>"]
+readme = "README.md"
+packages = [{include = "core"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+discord = "^2.1.0"
+poetry-dotenv-plugin = "^0.1.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
