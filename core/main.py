@@ -31,16 +31,11 @@ async def on_message(message):
                 "D-bot source: https://github.com/enricofd/d-bot"
             )
 
-        if message.content.lower() == "!author":
+        elif message.content.lower() == "!author":
             await message.channel.send(
                 "D-bot author: Enrico Francesco Damiani"
                 " (enrico.francesco.damiani@gmail.com)"
             )
-
-    else:
-        await message.channel.send(
-            "In order to talk with me or execute a command, please send a DM!"
-        )
 
 
 client.run(DISCORD_TOKEN)
