@@ -1,8 +1,9 @@
 import os
 import requests
+import json
 
 
-async def search(search_value: str = None, page_number: str = "1", page_size: str = "10") -> str:
+def search(search_value: str = None) -> str:
 
     WEB_SEARCH_KEY = os.environ.get("WEB_SEARCH_KEY")
 
@@ -10,7 +11,7 @@ async def search(search_value: str = None, page_number: str = "1", page_size: st
         try:
             url = "https://contextualwebsearch-websearch-v1.p.rapidapi.com/api/Search/WebSearchAPI"
 
-            querystring = {"q" : search_value, "pageNumber" : page_number, "pageSize" : page_size, "autoCorrect" : "true"}
+            querystring = {"q" : search_value, "pageNumber" : "1", "pageSize" : "10", "autoCorrect" : "true"}
 
             headers = {
                 "X-RapidAPI-Key": WEB_SEARCH_KEY,
@@ -19,10 +20,15 @@ async def search(search_value: str = None, page_number: str = "1", page_size: st
 
             response = requests.request("GET", url, headers=headers, params=querystring)
 
-            return response.text
+            response_dict = json.loads(response.text)
+
+            final_response = [result["url"] for result in response_dict["value"][:3]]
+            
+            return final_response
 
         except:
             return "API error."
 
     else:
         return "Could not identify value to search."
+

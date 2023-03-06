@@ -41,52 +41,35 @@ async def on_message(message):
 
         elif message.content.lower() == "!help":
             await message.channel.send(
-                "D-bot help: The bot is expected to run a command following the structure: !run \'%xxx% yyy zzz\'.\n"
+                "D-bot help: The bot is expected to run a command following the structure: !run xxx\n"
                 "This structure is resposible to search the web using the Web Search API ("
                 "https://rapidapi.com/contextualwebsearch/api/web-search/)."
-                "\nThe arguments are:\nxxx -> the value to be searched (must be enclosed by \'%\')\n"
-                "yyy -> page number (must be an integer)\nzzz -> page size (must be an inter).\n"
-                "Arguments yyy and zzz are optional while xxx is not."
+                "\nThe argument is:\nxxx -> the value to be searched\n"
+                "Argument xxx is not optional."
             )
 
-        elif re.fullmatch("!run(\s%.+%)(\s\w+){0,2}", message.content.lower()):
+        elif re.fullmatch("!run(\s.+)", message.content.lower()):
 
             try:
-                arguments = message.content.lower().split("%")[1::]
 
-                search_value = arguments[0]
-
-                if len(arguments) > 1:
-                    arguments_modify = arguments[1].split(" ")
-                    arguments_size = len(arguments_modify)
-
-                    if arguments_size == 1:
-                        page_number = arguments_modify[0]
-                        results = await search(search_value, page_number)
-
-                    elif arguments_size == 2:
-                        page_number = arguments_modify[0]
-                        page_size = arguments_modify[1]
-                        results = await search(search_value, page_number, page_size)
-
-                    else:
-                        raise IndexError
-
-                else:
-                    results = await search(search_value)
-
+                search_value = " ".join(message.content.lower().split(" ")[1::])
+                results = search(search_value)
                 await message.channel.send(
-                    f"D-bot web search result: {results}"
+                    f"D-bot found the following results for {search_value}: "
                 )
+                for result in results:
+                    await message.channel.send(
+                        f"{result}"
+                    )
 
             except:
                 await message.channel.send(
-                    f"D-bot could not process the request. Please, try again. You may use !help to better run a command."
+                    f"D-bot could not process the request for: {search_value}. Please, try again."
                 )
 
         else:
             await message.channel.send(
-                f"D-bot could not understand the command. Please, try again. You may use !help to better run a command."
+                f"D-bot could not understand the command. Please, try again."
             )
 
 
