@@ -11,19 +11,30 @@ def search(search_value: str = None) -> str:
         try:
             url = "https://contextualwebsearch-websearch-v1.p.rapidapi.com/api/Search/WebSearchAPI"
 
-            querystring = {"q" : search_value, "pageNumber" : "1", "pageSize" : "10", "autoCorrect" : "true"}
+            querystring = {
+                "q": search_value,
+                "pageNumber": "1",
+                "pageSize": "10",
+                "autoCorrect": "true",
+            }
 
             headers = {
                 "X-RapidAPI-Key": WEB_SEARCH_KEY,
-                "X-RapidAPI-Host": "contextualwebsearch-websearch-v1.p.rapidapi.com"
+                "X-RapidAPI-Host": (
+                    "contextualwebsearch-websearch-v1.p.rapidapi.com"
+                ),
             }
 
-            response = requests.request("GET", url, headers=headers, params=querystring)
+            response = requests.request(
+                "GET", url, headers=headers, params=querystring
+            )
 
             response_dict = json.loads(response.text)
 
-            final_response = [result["url"] for result in response_dict["value"][:3]]
-            
+            final_response = [
+                result["url"] for result in response_dict["value"][:3]
+            ]
+
             return final_response
 
         except:
@@ -31,4 +42,3 @@ def search(search_value: str = None) -> str:
 
     else:
         return "Could not identify value to search."
-
