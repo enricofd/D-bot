@@ -1,3 +1,6 @@
+# Help
+# Ensaio
+
 import os
 import discord
 import re
@@ -110,12 +113,28 @@ async def on_message(message):
                     " Please, try again."
                 )
 
-        elif re.fullmatch("!search(\s.+)", message.content.lower()):
+        elif re.fullmatch("!search(\s((?!th.)\w+))+(\sth=\d+\.\d+)?", message.content.lower()):
             try:
-                search_values = " ".join(
-                    message.content.lower().split(" ")[1::]
-                )
-                results = local_search(search_values)
+                th: str = message.content.lower().split("th=")[-1] if len(message.lower().split("th=")) > 1 else None
+
+                if th:
+                    if -1 <= float(th) <= 1:
+                        text = " ".join(message.lower().split("th=")[:-1])
+                        search_values = " ".join(
+                            text.split(" ")[1::]
+                        ).strip()
+                        results = local_search(search_values, (float(th) + 1) / 2)
+
+                    else:
+                        await message.channel.send(
+                            f"Please, make sure -1.0 >= th <= 1.0"
+                        )
+
+                else:
+                    search_values = " ".join(
+                        message.content.lower().split(" ")[1::]
+                    )
+                    results = local_search(search_values)
 
                 if results:
                     await message.channel.send(
@@ -136,12 +155,28 @@ async def on_message(message):
                     f" {search_values}. Please, try again."
                 )
 
-        elif re.fullmatch("!wn_search(\s.+)", message.content.lower()):
+        elif re.fullmatch("!wn_search(\s((?!th.)\w+))+(\sth=\d+\.\d+)?", message.content.lower()):
             try:
-                search_values = " ".join(
-                    message.content.lower().split(" ")[1::]
-                )
-                results = local_similarity_search(search_values)
+                th: str = message.content.lower().split("th=")[-1] if len(message.lower().split("th=")) > 1 else None
+
+                if th:
+                    if -1 <= float(th) <= 1:
+                        text = " ".join(message.lower().split("th=")[:-1])
+                        search_values = " ".join(
+                            text.split(" ")[1::]
+                        ).strip()
+                        results = local_similarity_search(search_values, (float(th) + 1) / 2)
+
+                    else:
+                        await message.channel.send(
+                            f"Please, make sure -1.0 >= th <= 1.0"
+                        )
+
+                else:
+                    search_values = " ".join(
+                        message.content.lower().split(" ")[1::]
+                    )
+                    results = local_similarity_search(search_values)
 
                 if results:
                     await message.channel.send(
@@ -162,10 +197,10 @@ async def on_message(message):
                     f" {search_values}. Please, try again."
                 )
 
-    else:
-        await message.channel.send(
-            f"D-bot could not understand the command. Please, try again."
-        )
+        else:
+            await message.channel.send(
+                f"D-bot could not understand the command. Please, try again."
+            )
 
 
 client.run(DISCORD_TOKEN)
