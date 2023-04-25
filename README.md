@@ -8,3 +8,4 @@
 [Ensaio 0](ensaio_0.md)
 [Ensaio 1](ensaio_1.md)
 [Ensaio 2](ensaio_2.md)
+[Ensaio 3](ensaio_3.md)

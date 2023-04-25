@@ -57,16 +57,18 @@ async def on_message(message):
                 " crawl data from the web (it may take a few seconds).\n      "
                 " Arguments:\n           xxx -> The url to be crawled, more"
                 " than one can be passes, splited by space (NOT optional)\n\n "
-                "  - Search:\n       Structure: !search xxx\n      "
+                "  - Search:\n       Structure: !search xxx th=y\n      "
                 " Description: This structure is resposible to search local"
                 " data, using an inverted index strategy.\n       Arguments:\n"
                 "           xxx -> Words to be searched, more than one can be"
-                " passes(NOT optional)\n\n  - WordNet search:\n      "
-                " Structure: !wn_search xxx\n       Description: This"
+                " passes(NOT optional)\n           y -> float th value (must be inserted as float)"
+                " passes(optional)\n\n  - WordNet search:\n      "
+                " Structure: !wn_search xxx th=y\n       Description: This"
                 " structure is resposible to search local data, using a"
                 " similarity (via WordNet) and inverted index strategy.\n     "
                 "  Arguments:\n           xxx -> Words to be searched, more"
-                " than one can be passes(NOT optional)\n\n"
+                " than one can be passes(NOT optional)\n           y -> float th value (must be inserted as float)"
+                " passes(optional)\n\n"
             )
 
         elif re.fullmatch("!run(\s.+)", message.content.lower()):
@@ -115,11 +117,11 @@ async def on_message(message):
 
         elif re.fullmatch("!search(\s((?!th.)\w+))+(\sth=\d+\.\d+)?", message.content.lower()):
             try:
-                th: str = message.content.lower().split("th=")[-1] if len(message.lower().split("th=")) > 1 else None
+                th: str = message.content.lower().split("th=")[-1] if len(message.content.lower().split("th=")) > 1 else None
 
                 if th:
                     if -1 <= float(th) <= 1:
-                        text = " ".join(message.lower().split("th=")[:-1])
+                        text = " ".join(message.content.lower().split("th=")[:-1])
                         search_values = " ".join(
                             text.split(" ")[1::]
                         ).strip()
@@ -150,6 +152,11 @@ async def on_message(message):
                     )
 
             except:
+
+                search_values = " ".join(
+                    message.content.lower().split(" ")[1::]
+                )
+
                 await message.channel.send(
                     "D-bot could not process the request for:"
                     f" {search_values}. Please, try again."
@@ -157,11 +164,11 @@ async def on_message(message):
 
         elif re.fullmatch("!wn_search(\s((?!th.)\w+))+(\sth=\d+\.\d+)?", message.content.lower()):
             try:
-                th: str = message.content.lower().split("th=")[-1] if len(message.lower().split("th=")) > 1 else None
+                th: str = message.content.lower().split("th=")[-1] if len(message.content.lower().split("th=")) > 1 else None
 
                 if th:
                     if -1 <= float(th) <= 1:
-                        text = " ".join(message.lower().split("th=")[:-1])
+                        text = " ".join(message.content.lower().split("th=")[:-1])
                         search_values = " ".join(
                             text.split(" ")[1::]
                         ).strip()
@@ -192,6 +199,11 @@ async def on_message(message):
                     )
 
             except:
+
+                search_values = " ".join(
+                    message.content.lower().split(" ")[1::]
+                )
+
                 await message.channel.send(
                     "D-bot could not process the request for:"
                     f" {search_values}. Please, try again."
