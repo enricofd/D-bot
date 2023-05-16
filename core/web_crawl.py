@@ -1,10 +1,11 @@
+from typing import Tuple, Set, Any, List
+
 import requests
 from bs4 import BeautifulSoup
 import re
 
 
-def crawl(urls: list) -> list:
-
+def crawl(urls: list) -> tuple[set[Any], list[tuple[Any, Any]]]:
     search_urls = set(urls)
     searched_urls = set()
     result = []
@@ -27,7 +28,7 @@ def crawl(urls: list) -> list:
 
                 if actual_depth < 1:
                     for link in soup.findAll(
-                        "a", attrs={"href": re.compile("http.+")}
+                            "a", attrs={"href": re.compile("http.+")}
                     ):
                         depth_urls.add(link.get("href"))
 

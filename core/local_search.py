@@ -3,7 +3,7 @@ import re
 import json
 
 
-def local_search(query: str, th: float = 0) -> list:
+def local_search(query: str, th: float = 0) -> dict:
     lemmatizer = WordNetLemmatizer()
 
     with open("data/data.json", "r") as f:
@@ -39,4 +39,3 @@ def local_search(query: str, th: float = 0) -> list:
     return {
         title: title_url[title] for title in list(ordered_result_passed.keys())[:3]
     }
-

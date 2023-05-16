@@ -1,10 +1,11 @@
 import os
+from typing import List, Any
+
 import requests
 import json
 
 
-def search(search_value: str = None) -> str:
-
+def search(search_value: str = None) -> list[Any] | None:
     WEB_SEARCH_KEY = os.environ.get("WEB_SEARCH_KEY")
 
     if search_value:
@@ -38,7 +39,7 @@ def search(search_value: str = None) -> str:
             return final_response
 
         except:
-            return "API error."
+            return None
 
     else:
-        return "Could not identify value to search."
+        return None
