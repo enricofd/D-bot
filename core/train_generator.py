@@ -34,11 +34,13 @@ def build_model(total_words, max_words_to_be_considered):
     model.add(LSTM(150))
     model.add(Dense(total_words, activation='softmax'))
     model.compile(loss='sparse_categorical_crossentropy', optimizer=Adam(lr=0.01))
+
     return model
 
 
 def main_generator():
     data = load_data("data/data_raw.json")
+
 
     tokenizer = Tokenizer()
     tokenizer.fit_on_texts(data)
@@ -48,9 +50,15 @@ def main_generator():
     max_words_to_be_considered = 7
     total_words = len(tokenizer.word_index) + 1
 
+
     input_sequences = np.array(pad_sequences(input_sequences, maxlen=max_words_to_be_considered))
     x, y = input_sequences[:, :-1], input_sequences[:, -1]
 
+
     model = build_model(total_words, max_words_to_be_considered)
-    model.fit(x, y, epochs=100, verbose=0)
+
+
+    model.fit(x, y, epochs=10, verbose=1)
+    print("model fit done")
     model.save('data/word_generator.tf')
+    print("model saved")

@@ -6,7 +6,7 @@ from save_data import save_data
 from local_search import local_search
 from local_similarity_search import local_similarity_search
 from train_generator import main_generator
-from generate_text import generate_text
+from open_ai import chat_gpt
 
 DISCORD_TOKEN = os.environ.get("DISCORD_TOKEN")
 
@@ -59,11 +59,10 @@ async def handle_help(message):
             y -> Threshold value (optional, must be a float)
 
     - Generate:
-        Structure: !generate xxx th=y
-        Description: This command generate a text based on a local data search, using an inverted index strategy as well as beam forming technique.
+        Structure: !generate xxx
+        Description: This command is integrated eith Chat-gpt 3.5. What is written will be passed to it.
         Arguments:
             xxx -> Words to be searched, more than one can be passed (NOT optional)
-            y -> Threshold value (optional, must be a float)
     """
     await message.channel.send(help_text)
 
@@ -138,12 +137,11 @@ async def handle_wn_search(message):
 
 
 async def handle_generate_text(message):
-    search_values, threshold = parse_search_parameters(message.content)
-    results = local_search(search_values, threshold) if threshold else local_search(search_values)
+    search_values, _ = parse_search_parameters(message.content)
+    results = chat_gpt(search_values)
 
     if results:
-        generated_text = generate_text([title for title, _ in results.items()][0])
-        await message.channel.send(f'{generated_text}')
+        await message.channel.send(f'{results}')
 
     else:
         await message.channel.send(f'Sorry I do not know how to answer this.')
